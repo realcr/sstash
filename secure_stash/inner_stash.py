@@ -49,7 +49,7 @@ class InnerStash:
         cur_node = None
         cur_children = self._store
 
-        for i,k in enumerate(key):
+        for k in key:
             if k not in cur_children:
                 cur_children[k] = {
                     "children": {},
