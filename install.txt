@@ -1,0 +1,4 @@
+
+Requirements: 
+
+apt install libffi-dev python3-dev
