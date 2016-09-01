@@ -19,3 +19,9 @@ class SecureStash:
         """
         pass
 
+    def remove_key(self,key):
+        """
+        Remove a key from the secure stash.
+        """
+        pass
+
