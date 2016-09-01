@@ -21,20 +21,19 @@ INNER_SCHEMA = {
         "children": {
             "type": "object",
             "patternProperties": {
-                ".*": {
-                    "entry": {
-                        "type": "object",
-                        "properties": {
-                            "children": {"$ref": "#/definitions/children"},
-                            "value": {"type": "string"},
-                        },
-                        "required": ["children"],
-                        "additionalProperties": False,
-                    }
-                }
+                ".*": {"$ref": "#/definitions/entry"},
             },
             "additionalProperties": False,
         },
+        "entry": {
+            "type": "object",
+            "properties": {
+                "children": {"$ref": "#/definitions/children"},
+                "value": {"type": "string"},
+            },
+            "required": ["children"],
+            "additionalProperties": False,
+        }
     },
     "$ref": "#/definitions/children",
 }
