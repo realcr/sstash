@@ -17,12 +17,18 @@ def hex_str_to_bytes(arg_str):
 
 class InnerStash:
     def __init__(self,store):
+        self._store = copy.deepcopy(store)
+        self._validate_store()
+
+    def _validate_store(self):
+        """
+        Make sure that inner store matches against INNER_SCHEMA
+        """
         try:
-            validate(store,INNER_SCHEMA)
+            validate(self._store,INNER_SCHEMA)
         except ValidationError:
             raise SSError("Invalid inner store.")
 
-        self._store = copy.deepcopy(store)
 
     def read_value(self,key):
         """
@@ -72,11 +78,7 @@ class InnerStash:
         # Set new value:
         cur_node["value"] = bytes_to_hex_str(value)
 
-        # Just to be sure:
-        try:
-            validate(self._store,INNER_SCHEMA)
-        except ValidationError:
-            raise SSError("Store got corrupted after writing value.")
+        self._validate_store()
 
 
     def remove_key(self,key):
@@ -111,6 +113,8 @@ class InnerStash:
         # Return the value of the removed node, or None is no value was found:
         if "value" not in last_node:
             return None
+
+        self._validate_store()
 
         return hex_str_to_bytes(last_node["value"])
 
