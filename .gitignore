@@ -2,3 +2,4 @@
 *.pyc
 .cache
 *.egg-info/
+.eggs/
