@@ -27,7 +27,7 @@ b'622324c09486bf30ed3a9213954a35c34de84535'
 
 >>> ss.read_value(['project','SomeService','token1'])
 ...
-secure_stash.exceptions.SSKeyError: Key ['project', 'SomeService', 'token1'] was not found in store.
+sstash.exceptions.SSKeyError: Key ['project', 'SomeService', 'token1'] was not found in store.
 
 ```
 
