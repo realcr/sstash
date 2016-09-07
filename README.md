@@ -121,3 +121,13 @@ Poly1305 MAC for authentication.
 All of the cryptography code can be found inside the file crypto_stash.py.
 
 
+# Reference
+
+## Exceptions:
+secure_stash.exceptions.SSError: import SSError, SSKeyError, SSValueError,
+```
+
+
+
+
+
