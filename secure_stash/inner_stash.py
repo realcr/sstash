@@ -1,4 +1,3 @@
-import codecs
 import copy
 
 from jsonschema import validate
@@ -6,13 +5,8 @@ from jsonschema.exceptions import ValidationError
 
 from .schema import INNER_SCHEMA
 from .exceptions import SSError,SSKeyError,SSValueError
+from .encode_utils import bytes_to_hex_str, hex_str_to_bytes
 
-
-def bytes_to_hex_str(arg_bytes):
-    return codecs.encode(arg_bytes,'hex').decode('ascii')
-
-def hex_str_to_bytes(arg_str):
-    return codecs.decode(arg_str.encode('ascii'),'hex')
 
 
 class InnerStash:
