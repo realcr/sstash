@@ -70,7 +70,7 @@ bytes b'bye' in the key ['a','b','d'], you will get the following tree inside
 the data store:
 
 ```
-ss.write_value(['a','b','c'],b'bye')
+ss.write_value(['a','b','c'],b'hello')
 ss.write_value(['a','b','d'],b'bye')
 
 'a'
