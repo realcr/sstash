@@ -1,7 +1,20 @@
-from secure_stash.inner_stash import InnerStash
+from secure_stash.inner_stash import \
+        InnerStash, bytes_to_hex_str, hex_str_to_bytes
 from ..exceptions import SSError, SSKeyError, SSValueError
-
 import pytest
+
+def test_bytes_str_conversion():
+    """
+    Test the validity of conversion between bytes and hex string.
+    """
+    some_bytes = b'some bytes.'
+    some_str = bytes_to_hex_str(some_bytes)
+    some_bytes2 = hex_str_to_bytes(some_str)
+    some_str2 = bytes_to_hex_str(some_bytes2)
+    assert some_bytes == some_bytes2
+    assert some_str == some_str2
+    assert isinstance(some_bytes2,bytes)
+    assert isinstance(some_str2,str)
 
 def test_initialization():
     return InnerStash({})
@@ -87,3 +100,28 @@ def test_basic_get_store():
     ins.write_value(['a','b','d','e'],b'abde')
 
     return ins.get_store()
+
+
+def test_remove_key():
+    """
+    Test the operation of key removal from store.
+    """
+    ins = InnerStash({})
+    ins.write_value(['a','b','c'],b'abc')
+    assert ins.remove_key(['a','b']) == None
+
+    with pytest.raises(SSKeyError):
+        ins.read_value(['a','b','c'])
+
+    ins.write_value(['a','b','c'],b'abc')
+    ins.write_value(['a','b'],b'ab')
+    assert ins.remove_key(['a','b']) == b'ab'
+
+    with pytest.raises(SSKeyError):
+        ins.read_value(['a','b','c'])
+
+    ins.write_value(['a','b','c'],b'abc')
+    ins.write_value(['a','b'],b'ab')
+    assert ins.remove_key(['a','b','c']) == b'abc'
+    assert ins.read_value(['a','b']) == b'ab'
+

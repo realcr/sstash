@@ -1,8 +1,19 @@
+import codecs
+import copy
+
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
-import codecs
+
 from .schema import INNER_SCHEMA
 from .exceptions import SSError,SSKeyError,SSValueError
+
+
+def bytes_to_hex_str(arg_bytes):
+    return codecs.encode(arg_bytes,'hex').decode('ascii')
+
+def hex_str_to_bytes(arg_str):
+    return codecs.decode(arg_str.encode('ascii'),'hex')
+
 
 class InnerStash:
     def __init__(self,store):
@@ -11,7 +22,7 @@ class InnerStash:
         except ValidationError:
             raise SSError("Invalid inner store.")
 
-        self._store = store
+        self._store = copy.deepcopy(store)
 
     def read_value(self,key):
         """
@@ -33,7 +44,7 @@ class InnerStash:
 
         try:
             # Return value:
-            return codecs.decode(cur_node["value"].encode('ascii'),'hex')
+            return hex_str_to_bytes(cur_node["value"])
         except KeyError:
             raise SSKeyError("Key {} was not set a value in store."\
                     .format(key[:i+1]))
@@ -59,7 +70,7 @@ class InnerStash:
             cur_children = cur_node["children"]
 
         # Set new value:
-        cur_node["value"] = codecs.encode(value,'hex').decode('ascii')
+        cur_node["value"] = bytes_to_hex_str(value)
 
         # Just to be sure:
         try:
@@ -67,8 +78,41 @@ class InnerStash:
         except ValidationError:
             raise SSError("Store got corrupted after writing value.")
 
+
     def remove_key(self,key):
-        assert False
+        """
+        Remove key from stash. Returns the value of this key.
+        """
+        cur_node = None
+        cur_children = self._store
+
+        if len(key) == 0:
+            raise SSKeyError("Empty key was provided.")
+
+        for i,k in enumerate(key[:-1]):
+            try:
+                cur_node = cur_children[k]
+            except KeyError:
+                raise SSKeyError("Key {} was not found in store."\
+                        .format(key[:i+1]))
+            cur_children = cur_node["children"]
+
+
+        lastk = key[-1]
+        if lastk not in cur_children:
+            raise SSKeyError("Key {} was not found in store."\
+                    .format(key))
+
+        last_node = cur_children[lastk]
+
+        # Remove node:
+        del cur_children[lastk]
+
+        # Return the value of the removed node, or None is no value was found:
+        if "value" not in last_node:
+            return None
+
+        return hex_str_to_bytes(last_node["value"])
 
 
     def get_store(self):
