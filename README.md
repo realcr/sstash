@@ -3,7 +3,7 @@
 A simple on-disk secure stash for secrets, written in python.
 
 
-# Basic Usage
+# Basic API Usage
 
 ```python
 >>> from secure_stash.sstash import SecureStash
@@ -43,6 +43,81 @@ Then install from Pypi:
 pip install sstash
 ```
 
-# API
+
+# Tutorial
+
+secure_stash allows you to encrypt your secrets on disk using a simple python
+API. A secure_stash is a single file on disk. 
+
+To keep the data inside the data store hidden from other people, we
+encrypt it using a password. 
+
+To create a new stash file, we run a python line of this form:
+
+```
+ss = SecureStash('my_stash','my_password1234')
+```
+
+If my_stash has never existed before, this line will create a new stash file
+called my_stash. It will be empty, and it will be encrypted using the password
+'my_password1234'. If the stash my_stash already exists, it will be opened.
+
+
+The secure stash is built as a tree based data store.  
+
+For example, If you store the bytes b'hello' in the key ['a','b','c'], and the
+bytes b'bye' in the key ['a','b','d'], you will get the following tree inside
+the data store:
+
+```
+ss.write_value(['a','b','c'],b'bye')
+ss.write_value(['a','b','d'],b'bye')
+
+'a'
+ |--'b'
+     |--'c' : b'hello'
+     |--'d' : b'bye'
+```
+
+If you then store the bytes b'chocolate' inside the key ['a','e'], you will get
+the following tree:
+
+
+```
+ss.write_value(['a','e'],b'chocolate')
+
+'a'
+ |--'b'
+ |   |--'c' : b'hello'
+ |   |--'d' : b'bye'
+ |
+ |--'e': b'chocolate'
+```
+
+If we then remove the key ['a','b','c'] we will get the following tree:
+
+```
+ss.remove_key(['a','b','c'])
+
+'a'
+ |--'b'
+ |   |--'d' : b'bye'
+ |
+ |--'e': b'chocolate'
+```
+
+
+# Cryptography used
+
+secure_stash is based on well known cryptography primitives. For key derivation
+(Creating a key from the given user password) it uses pbkdf2 (Python's standard
+implementation).
+The random for the salt for the password is taken from os.urandom.
+
+PyNaCl's Secret Key Encryption is used for encrypting the data store. PyNaCl
+uses Secret Key Encryption uses Salsa20 steam cipher for encryption and
+Poly1305 MAC for authentication.
+
+All of the cryptography code can be found inside the file crypto_stash.py.
 
 
