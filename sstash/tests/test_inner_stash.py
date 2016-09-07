@@ -1,4 +1,4 @@
-from secure_stash.inner_stash import InnerStash
+from ..inner_stash import InnerStash
 from ..exceptions import SSError, SSKeyError, SSValueError
 import pytest
 

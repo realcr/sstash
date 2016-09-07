@@ -2,7 +2,7 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 import pytest
 
-from secure_stash.schema import OUTER_SCHEMA, INNER_SCHEMA
+from ..schema import OUTER_SCHEMA, INNER_SCHEMA
 
 def test_validate_outer_success():
     """
