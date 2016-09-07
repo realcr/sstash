@@ -1,7 +1,7 @@
 # Python Secure Stash
 
 A simple on-disk secure stash for secrets, written in python.
-
+Requires python >= 3 to work.
 
 # Basic API Usage
 
@@ -120,14 +120,28 @@ Poly1305 MAC for authentication.
 
 All of the cryptography code can be found inside the file crypto_stash.py.
 
+# Tests
 
-# Reference
+Proudly tested by py.test.
+To run the tests (Make sure that you are at the root directory first):
 
-## Exceptions:
-secure_stash.exceptions.SSError: import SSError, SSKeyError, SSValueError,
+```
+py.test sstash 
 ```
 
 
+## Exceptions:
 
+All the exceptions can be imported from
 
+```
+sstash.exceptions
+```
+
+The base exception is sstash.exceptions.SSError.
+Other exceptions are:
+
+- sstash.exceptions.SSKeyError
+- sstash.exceptions.SSValueError
+- sstash.exceptions.SSCryptoError
 
