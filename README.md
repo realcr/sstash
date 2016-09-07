@@ -2,6 +2,7 @@
 
 A simple on-disk secure stash for secrets, written in python.
 Requires python >= 3 to work.
+
 **This is a new project. Use with caution.**
 
 # Basic API Usage
