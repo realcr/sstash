@@ -6,7 +6,7 @@ Requires python >= 3 to work.
 # Basic API Usage
 
 ```python
->>> from secure_stash.sstash import SecureStash
+>>> from sstash.sstash import SecureStash
 
 >>> ss = SecureStash('my_stash','my_password1234')
 
