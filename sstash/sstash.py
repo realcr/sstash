@@ -3,8 +3,14 @@ from .inner_stash import InnerStash
 from .exceptions import SSError, SSCryptoError
 
 class SecureStash:
-    def __init__(self,path,password):
-        self._crypto_stash = CryptoStash(path,password)
+    def __init__(self,path,password,debug=False):
+        if not debug:
+            # Production:
+            self._crypto_stash = CryptoStash(path,password)
+        else:
+            # Less iterations for faster tests:
+            self._crypto_stash = \
+                    CryptoStash(path,password,default_num_iterations=100)
 
     def read_value(self,key):
         """
