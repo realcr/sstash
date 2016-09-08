@@ -84,6 +84,7 @@ class InnerStash:
         cur_children = self._store
 
         if len(key) == 0:
+            # TODO: Empty key should remove everything:
             raise SSKeyError("Empty key was provided.")
 
         for i,k in enumerate(key[:-1]):
