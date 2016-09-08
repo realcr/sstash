@@ -112,6 +112,13 @@ def test_remove_key():
     assert ins.remove_key(['a','b','c']) == b'abc'
     assert ins.read_value(['a','b']) == b'ab'
 
+    # Remove all keys:
+    ins.remove_key([])
+    with pytest.raises(SSKeyError):
+        ins.read_value(['a','b'])
+
+    assert len(ins.get_children([])) == 0
+
 
 def test_remove_nonexistent_key():
     ins = InnerStash({})

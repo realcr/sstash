@@ -83,9 +83,11 @@ class InnerStash:
         cur_node = None
         cur_children = self._store
 
+        # If key is empty, remove all store:
         if len(key) == 0:
-            # TODO: Empty key should remove everything:
-            raise SSKeyError("Empty key was provided.")
+            for child in list(cur_children.keys()):
+                del cur_children[child]
+            return None
 
         for i,k in enumerate(key[:-1]):
             try:
