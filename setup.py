@@ -9,7 +9,7 @@ def readme():
 
 
 setup(name='sstash',
-        version='0.15',
+        version='0.16',
         description='A simple on-disk secure stash for secrets',
         long_description=readme(),
         classifiers=[
