@@ -14,6 +14,14 @@ class SecureStash:
         istash = InnerStash(store)
         return istash.read_value(key)
 
+    def get_children(self,key):
+        """
+        Get children of a key.
+        """
+        store = self._crypto_stash.read_store()
+        istash = InnerStash(store)
+        return istash.get_children(key)
+
     def write_value(self,key,value):
         """
         Write value to key.
@@ -33,4 +41,5 @@ class SecureStash:
         value = istash.remove_key(key)
         self._crypto_stash.write_store(istash.get_store())
         return value
+
 
