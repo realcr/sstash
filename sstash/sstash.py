@@ -1,6 +1,8 @@
+import os
+from os.path import join
 from .crypto_stash import CryptoStash
 from .inner_stash import InnerStash
-from .exceptions import SSError, SSCryptoError
+from .exceptions import SSError, SSCryptoError, SSKeyError
 
 class SecureStash:
     def __init__(self,path,password,debug=False):
@@ -48,4 +50,57 @@ class SecureStash:
         self._crypto_stash.write_store(istash.get_store())
         return value
 
+    def write_file(self,key,src_path):
+        """
+        Write a file into the key.
+        """
+        with open(src_path,'rb') as fr:
+            self.write_value(key,fr.read())
+
+    def read_file(self,key,dest_path):
+        """
+        Read a file from key.
+        """
+        with open(dest_path,'wb') as fw:
+            fw.write(self.read_value(key))
+
+
+    def write_dir(self,key,src_dir):
+        """
+        Write a directory into the key (recursively)
+        """
+        def inner_write_dir(prefix):
+            work_path = join(src_dir,*prefix)
+            for entry in os.listdir(work_path):
+                fullpath = join(work_path,entry)
+                if os.path.isfile(fullpath):
+                    self.write_file(key + prefix + [entry],fullpath)
+                else:
+                    inner_write_dir(prefix + [entry])
+        inner_write_dir([])
+
+
+    def read_dir(self,key,dest_dir):
+        """
+        Read a directory from a key (recursively)
+        """
+        if os.path.exists(dest_dir):
+            raise SSError('Path {} already exists'.format(dest_dir))
+
+        def inner_read_dir(prefix):
+            os.makedirs(join(dest_dir,*prefix))
+            for child in self.get_children(key + prefix):
+                fullkey = key + prefix + [child]
+                has_value = True
+                try:
+                    self.read_value(fullkey)
+                except SSKeyError:
+                    has_value = False
+
+                if has_value:
+                    self.read_file(fullkey,\
+                            join(dest_dir,*(prefix + [child])))
+                else:
+                    inner_read_dir(prefix + [child])
+        inner_read_dir([])
 
