@@ -129,9 +129,6 @@ class InnerStash:
                         .format(key[:i+1]))
             cur_children = cur_node["children"]
 
-        if cur_node is None:
-            raise SSKeyError("Empty key was provided: {}".format(key))
-
         return list(cur_children.keys())
 
 

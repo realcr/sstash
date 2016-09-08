@@ -133,9 +133,8 @@ def test_get_children():
     assert ins.get_children(['a','b','d','e']) == []
     assert ins.get_children(['a','b','d']) == ['e']
 
-    # Try with empty key:
-    with pytest.raises(SSKeyError):
-        ins.get_children([])
+    # Empty key:
+    assert ins.get_children([]) == ['a']
 
     # Try nonexistent key:
     with pytest.raises(SSKeyError):
