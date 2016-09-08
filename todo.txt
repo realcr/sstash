@@ -2,3 +2,4 @@
 - Add ability to change password?
 - Add ability to check if a key exists?
 - Check atomicity issues when changing stash.
+- Add command python line tool to inspect/change values manually.
