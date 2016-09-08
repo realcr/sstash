@@ -50,6 +50,7 @@ class InnerStash:
                     .format(key[:i+1]))
 
 
+
     def write_value(self,key,value):
         """
         Write a value to the stash
@@ -111,6 +112,27 @@ class InnerStash:
         self._validate_store()
 
         return hex_str_to_bytes(last_node["value"])
+
+
+    def get_children(self,key):
+        """
+        Get a list of children for a key.
+        """
+        cur_node = None
+        cur_children = self._store
+
+        for i,k in enumerate(key):
+            try:
+                cur_node = cur_children[k]
+            except KeyError:
+                raise SSKeyError("Key {} was not found in store."\
+                        .format(key[:i+1]))
+            cur_children = cur_node["children"]
+
+        if cur_node is None:
+            raise SSKeyError("Empty key was provided: {}".format(key))
+
+        return list(cur_children.keys())
 
 
     def get_store(self):

@@ -119,3 +119,25 @@ def test_remove_nonexistent_key():
     with pytest.raises(SSKeyError):
         ins.remove_key(['d','e','f'])
 
+
+def test_get_children():
+    ins = InnerStash({})
+    ins.write_value(['a','b','c'],b'abc')
+    ins.write_value(['a','b'],b'ab')
+    ins.write_value(['a','b','d'],b'abd')
+    ins.write_value(['a','b','d','e'],b'abde')
+    ins.write_value(['a','b','f'],b'abf')
+
+    assert ins.get_children(['a']) == ['b']
+    assert sorted(ins.get_children(['a','b'])) == sorted(['c','d','f'])
+    assert ins.get_children(['a','b','d','e']) == []
+    assert ins.get_children(['a','b','d']) == ['e']
+
+    # Try with empty key:
+    with pytest.raises(SSKeyError):
+        ins.get_children([])
+
+    # Try nonexistent key:
+    with pytest.raises(SSKeyError):
+        ins.get_children(['r','q'])
+
