@@ -48,8 +48,8 @@ pip install sstash
 
 # Tutorial
 
-secure_stash allows you to encrypt your secrets on disk using a simple python
-API. A secure_stash is a single file on disk. 
+sstash allows you to encrypt your secrets on disk using a simple python
+API. A secure stash is a single file on disk. 
 
 To keep the data inside the data store hidden from other people, we
 encrypt it using a password. 
@@ -111,7 +111,7 @@ ss.remove_key(['a','b','c'])
 
 # Cryptography used
 
-secure_stash is based on well known cryptography primitives. For key derivation
+sstash is based on well known cryptography primitives. For key derivation
 (Creating a key from the given user password) it uses pbkdf2 (Python's standard
 implementation).
 The random for the salt for the password is taken from os.urandom.
