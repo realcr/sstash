@@ -42,7 +42,7 @@ $ sudo apt install libffi-dev python3-dev
 Then install from [PyPI](https://pypi.python.org/pypi/sstash):
 
 ```
-$ pip3 install sstash
+$ pip install sstash
 ```
 
 # Tutorial
